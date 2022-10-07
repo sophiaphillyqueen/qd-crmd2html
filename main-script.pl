@@ -1,6 +1,7 @@
 #! /usr/bin/perl
 use File::Basename;
 use Cwd 'abs_path';
+use x_cycula;
 
 my $dir_of_scr_raw = dirname($0);
 my $dir_of_src = abs_path($dir_of_scr_raw);
@@ -30,7 +31,14 @@ sub yet_another_round {
   
   if ( $eachon eq '-f' )
   {
-    @source_files = (@source_files,&gleanari());
+    my $lc2_a;
+    $lc2_a = &gleanari();
+    if ( -f $lc2_a )
+    {
+      @source_files = (@source_files,&abs_path($lc2_a));
+      return;
+    }
+    print STDERR "No such file: " . $lc2_a . " :\n";
     return;
   }
   
@@ -47,4 +55,9 @@ sub yet_another_round {
   }
   
   die "\nUnrecognized option: " . $eachon . " :\n\n";
+}
+
+{
+  my $lc_a;
+  foreach $lc_a (@source_files) { &x_cycula::mainround($lc_a); }
 }
